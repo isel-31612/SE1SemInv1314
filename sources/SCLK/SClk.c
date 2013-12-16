@@ -3,8 +3,8 @@
 
 void SYSCLK_Init(int freq)
 {
-	int prVal= divide(getPclk(),freq);
-	//int prVal= getPclk()/freq;
+	//int prVal= divide(getPclk(),freq);
+	int prVal= getPclk()/freq;
 	/*Parar o timer*/
 	TIMER0->TCR = 0;
 	/* Falta fazer reset PLL */
