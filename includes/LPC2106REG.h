@@ -118,7 +118,7 @@ typedef struct{
 	LPC_REGISTER CONCLR;
 } I2C_STRUCT;
 
-#define I2C1_BASE 0xE001C00
+#define I2C1_BASE 0xE001C000
 #define I2C1 ((I2C_STRUCT*)(I2C1_BASE))
 #define LPC_PWR 0xE01FC0C4
 

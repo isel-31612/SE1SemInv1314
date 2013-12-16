@@ -3,28 +3,12 @@
 
 #include "LPC2106REG.h"
 
-/**
-* @fn void PLL_Init(unsigned int m, unsigned int p);
-* @param m Valor multiplicador, recebe a mascara correspondente ao valor a colocar
-* @param p Valor divisor, recebe a mascara correspondente ao valor a colocar
-* 
-* Inicia a PLL 
-* @see Os valores de M e de P têm de estar de acordo com as normas descritas 
-* no manual do LP3206
-*/
-void PLL_Init(unsigned int m, unsigned int p);
-void setVpbdiv(unsigned int val);
+void I2C_Init();
 
-/**
-* @fn int getPclk()
-* Devolve a velocidade do Clock dos perifericos
-*/
-int getPclk();
+void I2C_Start();
+void I2C_Stop();
 
-/**
-* @fn int getCclk()
-* Devolve a velocidade do Clock do CPU
-*/
-int getCclk();
+void I2C_WriteByte(unsigned char byte);
+unsigned char I2C_ReadByte();
 
 #endif
