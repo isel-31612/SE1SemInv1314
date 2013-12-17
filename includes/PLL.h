@@ -14,7 +14,7 @@
 * 
 * Inicia a PLL 
 * @see Os valores de M e de P têm de estar de acordo com as normas descritas 
-* no manual do LP3206
+* no manual do LPC2106
 */
 void PLL_Init(unsigned int m, unsigned int p);
 void setVpbdiv(unsigned int val);
