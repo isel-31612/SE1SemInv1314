@@ -14,6 +14,14 @@ typedef struct{
 #define GPIO_BASE 0xE0028000
 #define GPIO ((GPIO_STRUCT*)(GPIO_BASE))
 
+/* PINSEL define a function of pin */
+typedef struct{
+	LPC_REGISTER PINSEL0;
+	LPC_REGISTER PINSEL1;
+} GPIO_PIN_STRUCT;
+
+#define GPIO_PINSEL_BASE 0xE002C000
+#define GPIO_PINSEL ((GPIO_PIN_STRUCT*)(GPIO_PINSEL_BASE))
 
 /* Timer 0 REGISTERS*/
 
@@ -118,8 +126,8 @@ typedef struct{
 	LPC_REGISTER CONCLR;
 } I2C_STRUCT;
 
-#define I2C1_BASE 0xE001C000
-#define I2C1 ((I2C_STRUCT*)(I2C1_BASE))
+#define I2C_BASE 0xE001C000
+#define I2C ((I2C_STRUCT*)(I2C_BASE))
 #define LPC_PWR 0xE01FC0C4
 
 
