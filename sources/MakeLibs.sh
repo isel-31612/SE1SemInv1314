@@ -21,3 +21,7 @@ cd ..
 cd LCD
 make lib
 cd ..
+
+cd I2C
+make lib
+cd ..
