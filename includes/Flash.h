@@ -10,6 +10,24 @@
  * */
 #define IAP_ADDR 0x7FFFFFF1
 
+//Sectores
+
+#define SECTOR_0		0x0
+#define SECTOR_1		0x1
+#define SECTOR_2		0x2
+#define SECTOR_3		0x3
+#define SECTOR_4		0x4
+#define SECTOR_5		0x5
+#define SECTOR_6		0x6
+#define SECTOR_7		0x7
+#define SECTOR_8		0x8
+#define SECTOR_9		0x9
+#define SECTOR_10		0xA
+#define SECTOR_11		0xB
+#define SECTOR_12		0xC
+#define SECTOR_13		0xD
+#define SECTOR_14		0xE
+#define SECTOR_15		0xF
 
 #define FLASH_SECTOR_0_START 0x00000000
 #define FLASH_SECTOR_1_START 0x00002000

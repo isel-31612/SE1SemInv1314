@@ -5,6 +5,7 @@
 
 #define SDA 0x8
 #define SCL 0x5
+
 #define DELAY 5
 
 /* I2EN = 1, STA, STO, SI, AA = 0 */
