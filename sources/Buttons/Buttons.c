@@ -16,7 +16,7 @@ unsigned int Button_Hit()
 	return (GPIO_Read() && ( BUTTON_UP| BUTTON_MEN | BUTTON_DOWN)<<BUTTON_OFFSET) != 0 ? BUTTON_PRESSED : BUTTON_N_PRESSED
 }
 
-unsigned int ButtonRead_()
+unsigned int Button_Read()
 {
 	
 	if(Button_Hit()=0)
