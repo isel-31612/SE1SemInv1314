@@ -3,8 +3,8 @@
 
 #include "LPC2106REG.h"
 
-#define SDA 0x8
-#define SCL 0x5
+#define SCL 0x1<<2
+#define SDA 0x1<<3
 
 #define DELAY 5
 
