@@ -5,16 +5,17 @@
 #define BUTTON_PRESSED 0x1
 
 //In GPIO
-#define BUTTON_DOWN 0x1<<12
-#define BUTTON_MEN	0x1<<11
-#define BUTTON_UP	0x1<<10
+#define BUTTON_DOWN 0x1<<31
+#define BUTTON_MEN	0x1<<30
+#define BUTTON_UP	0x1<<29
 
 
 
-#define BUTTON_OFFSET 10
+#define BUTTON_OFFSET 29
 
-void Init_Button();
+void Button_Init();
 unsigned int Button_Hit();
-unsigned int ButtonRead_();
+unsigned int Button_Read();
+unsigned int Button_Read_Block();
 
 #endif

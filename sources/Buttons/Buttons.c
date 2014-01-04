@@ -1,7 +1,7 @@
 #include "../../includes/Buttons.h"
 #include "../../includes/GPIO.h"
 
-void Init_Button()
+void Button_Init()
 {
 	/*
 	* O GPIO é iniciado a zero, porque qos botoes são de input
@@ -13,18 +13,23 @@ void Init_Button()
 
 unsigned int Button_Hit()
 {
-	return (GPIO_Read() && ( BUTTON_DOWN| BUTTON_MEN | BUTTON_UP)<<BUTTON_OFFSET) != 0 ? BUTTON_PRESSED : BUTTON_N_PRESSED
+	return (GPIO_Read() && ( BUTTON_DOWN | BUTTON_MEN | BUTTON_UP)) != 0 ? BUTTON_PRESSED : BUTTON_N_PRESSED;
 }
 
 unsigned int Button_Read()
 {
+	return (GPIO_Read() && ( BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
+}
+
+unsigned int Button_Read_Block()
+{
 	
-	if(Button_Hit()=0)
+	if(Button_Hit()!=0)
 	{
-		return (GPIO_Read() && ( BUTTON_DOWN| BUTTON_MEN | BUTTON_UP)<<BUTTON_OFFSET);
+		return (GPIO_Read() && ( BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
 	}
 	
-	while(Button_Hit())==0);
-	return (GPIO_Read() && ( BUTTON_DOWN| BUTTON_MEN | BUTTON_UP)<<BUTTON_OFFSET);
+	while(Button_Hit()==0);
+	return (GPIO_Read() && ( BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
 
 }
