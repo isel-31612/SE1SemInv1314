@@ -2,8 +2,8 @@ GCC_LIB = /usr/local/arm-tools/arm-2009q1/lib/gcc/arm-none-eabi/4.3.3/
 C_LIB = /usr/local/arm-tools/arm-2009q1/arm-none-eabi/lib/
 MY_LIBS = ../../libs/
 
-all: init.o main.o
-	arm-none-eabi-ld -o App.axf init.o main.o -T ldscript_rom -l LPC2106 -l RadioApp -l Utils -L $(MY_LIBS) -l c -L $(C_LIB) -l gcc -L $(GCC_LIB)
+all: init.o App.o ChangeTime.o
+	arm-none-eabi-ld -o App.axf init.o App.o ChangeTime.o -T ldscript_rom -l LPC2106 -l Utils -L $(MY_LIBS) -l c -L $(C_LIB) -l gcc -L $(GCC_LIB)
 
 %.o: %.c
 	arm-none-eabi-gcc -g -c ${<} -o ${@}
