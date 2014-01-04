@@ -11,10 +11,11 @@ RTC.axf: init.o main.o $(MY_LIBS)libUtils.a RTC.o
 %.o: %.S
 	arm-none-eabi-as -g ${<} -o ${@}
 
+lib: I2C.o
+	arm-none-eabi-ar rcs ../../libs/libLPC2106.a I2C.o
+
 test: init.o main.o
 	arm-none-eabi-ld -o Test.axf main.o init.o -T ldscript_ram -l LPC2106 -l Utils -L $(MY_LIBS) -l c -L $(C_LIB) -l gcc -L $(GCC_LIB)
 
 clean: 
 	rm -f *.o *.axf
-
-all: clean RTC.axf

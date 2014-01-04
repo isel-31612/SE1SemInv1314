@@ -1,9 +1,4 @@
-#include "../../includes/SCLK.h"
-#include "../../includes/RTC.h"
-#include "../../includes/PLL.h"
-#include "../../includes/LCD.h"
-#include "../../includes/I2C.h"
-#include "../../includes/FLASH.h"
+#include "../../includes/SClk.h"
 #include "../../includes/Buttons.h"
 
 #define MAX_PRESSED_BUTTON 200
@@ -12,7 +7,6 @@
 #define CHANGE_HOURS	0
 #define SHOW_HOURS		1
 #define CHANGE_RADIO	2
-
 
 unsigned int lastStateButton = 0;
 unsigned int delayButton = 0;
@@ -23,16 +17,13 @@ unsigned int decodeButtons(unsigned int bitmap)
 	
 	if(bitmap != 0) //botao pressionado
 	{
-		//Short press
-		if(lastStateButton == 0 && delayButton == 0)
-		{
-			lastStateButton = bitmap;
-			if(bitmap && (BUTTON_DOWN || BUTTON_UP)) return CHANGE_RADIO;
-		}
+		//Short press in radio
+		if(bitmap & (BUTTON_DOWN | BUTTON_UP)) return CHANGE_RADIO;
 		
-		if(lastStateButton != 0 && delayButton == 0)
-		{
+		if(lastStateButton == 0){
 			delayButton = SYSCLK_GetValue();
+			lastStateButton = bitmap;
+			return SHOW_HOURS;
 		}
 		
 		//Caso nao tenha existido alterações nos botoes
@@ -40,12 +31,13 @@ unsigned int decodeButtons(unsigned int bitmap)
 		{
 			if(bitmap == BUTTON_MEN)
 			{
-				return CHANGE_HOURS;
 				lastStateButton = 0;
+				delayButton = 0;
+				return CHANGE_HOURS;
 			}
-			
 		}
 	}
+	delayButton = 0;
 	lastStateButton = 0;
 	return SHOW_HOURS;
 	
@@ -59,7 +51,7 @@ int main()
 	
 	//System init
 	SYSCLK_Init(1000);
-	
+
 	while(1)
 	{
 
@@ -69,6 +61,9 @@ int main()
 		switch(nextState)
 		{
 
+			case CHANGE_HOURS:
+				break;
+				
 			case CHANGE_RADIO:
 				break;
 			
@@ -76,7 +71,7 @@ int main()
 				break;
 				
 			default:
-				//mostra horas
+				//mostra horas caso algo corra mal
 				break;
 		}
 

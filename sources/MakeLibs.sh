@@ -25,3 +25,7 @@ cd ..
 cd I2C
 make lib
 cd ..
+
+cd Buttons
+make lib
+cd ..
