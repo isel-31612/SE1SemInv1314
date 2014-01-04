@@ -13,12 +13,12 @@ void Button_Init()
 
 unsigned int Button_Hit()
 {
-	return (GPIO_Read() && ( BUTTON_DOWN | BUTTON_MEN | BUTTON_UP)) != 0 ? BUTTON_PRESSED : BUTTON_N_PRESSED;
+	return (GPIO_Read() & (BUTTON_DOWN | BUTTON_MEN | BUTTON_UP)) != 0 ? BUTTON_PRESSED : BUTTON_N_PRESSED;
 }
 
 unsigned int Button_Read()
 {
-	return (GPIO_Read() && ( BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
+	return (GPIO_Read() & (BUTTON_DOWN | BUTTON_MEN | BUTTON_UP));
 }
 
 unsigned int Button_Read_Block()
@@ -26,10 +26,10 @@ unsigned int Button_Read_Block()
 	
 	if(Button_Hit()!=0)
 	{
-		return (GPIO_Read() && ( BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
+		return (GPIO_Read() & (BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
 	}
 	
 	while(Button_Hit()==0);
-	return (GPIO_Read() && ( BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
+	return (GPIO_Read() & (BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
 
 }

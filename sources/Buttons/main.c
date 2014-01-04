@@ -8,7 +8,8 @@ int main(){
 	{
 		
 		unsigned int b = Button_Read();
-		unsigned int c = Button_Read_Block();
+		unsigned int c = Button_Read();
+		//unsigned int c = Button_Read_Block();
 		
 	}
 
