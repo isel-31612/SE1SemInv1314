@@ -1,6 +1,7 @@
 #include "../../includes/SClk.h"
 #include "../../includes/Buttons.h"
 #include "../../includes/RTC.h"
+#include "../../includes/LCD.h"
 
 #include "App.h"
 #include "ChangeTime.h"
@@ -8,8 +9,13 @@
 unsigned int lastStateButton = 0;
 unsigned int delayButton = 0;
 
+//Buffer para guardar as horas e imprimir no lcd
+char buffer [16];
+
 //time init structure
 struct tm ti;
+
+struct tm toChange;
 
 //Esta função só é chamada quando houve algum botao pressionado
 unsigned int decodeButtons(unsigned int bitmap)
@@ -27,14 +33,12 @@ unsigned int decodeButtons(unsigned int bitmap)
 		}
 		
 		//Caso nao tenha existido alterações nos botoes
-		if(lastStateButton == bitmap && SYSCLK_Elapsed(delayButton)>MAX_PRESSED_BUTTON)
+		unsigned int t = SYSCLK_Elapsed(delayButton);
+		if(lastStateButton == bitmap && bitmap == BUTTON_MEN && t>=MAX_PRESSED_BUTTON)
 		{
-			if(bitmap == BUTTON_MEN)
-			{
-				lastStateButton = 0;
-				delayButton = 0;
-				return CHANGE_HOURS;
-			}
+			lastStateButton = 0;
+			delayButton = 0;
+			return CHANGE_HOURS;
 		}
 	}
 	delayButton = 0;
@@ -67,6 +71,7 @@ int main()
 	//System init
 	SYSCLK_Init(1000); /* Acertar o clock do TIMER*/
 	RTC_Init(&ti); /* Iniciar o RTC com a data e hora definida inifialmente*/
+	LCD_Init();
 
 	while(1)
 	{
@@ -76,15 +81,22 @@ int main()
 		
 		switch(nextState)
 		{
-
 			case CHANGE_HOURS:
-				changeHours(&ti);
+				memcpy(&toChange, &ti, sizeof(struct tm));
+				changeHours(&toChange);
+				memcpy(&ti, &toChange, sizeof(struct tm));
 				break;
 				
 			case CHANGE_RADIO:
 				break;
 			
+			//Tambem devia de escrever a freq do radio
 			case SHOW_HOURS:
+				RTC_GetValue(&ti);
+				LCD_Clear();
+				LCD_Goto(0,0);
+				strftime(buffer,16,"%T",&ti);
+				LCD_WriteString(buffer);
 				break;
 				
 			default:
@@ -95,3 +107,11 @@ int main()
 	}	
 	return 0;
 }
+
+/*
+ * Esta funcao é chamada quando é feito o MALLOC
+ * Se alguma vez for chamado o MALOC o código ira ficar
+ * bloquado aqui. Assim sabemos que alguem tentou usar o
+ * MALOC e nos nao suportamos essa operacao 
+ * */
+int _sbrk(){ while(1); }

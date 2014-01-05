@@ -1,7 +1,7 @@
 #ifndef _CHANGETIME_H_
 #define _CHANGETIME_H_
 
-	#define MAX_PRESSED_BUTTON 200
+	#define MAX_PRESSED_BUTTON_TIME 5000
 
 	#define SET_HOURS 0
 	#define CHANGE_FIELD 5
@@ -13,7 +13,6 @@
 	#define DEC_MINUTES 4
 
 	#define DO_NOTHING 6
-	#define FULL_RETURN 7
 
 	/**
 	 * @fn unsigned int decodeButtons_inHours(unsigned int bitmap);

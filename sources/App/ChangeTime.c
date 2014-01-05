@@ -1,13 +1,16 @@
 #include "../../includes/Buttons.h"
 #include "../../includes/RTC.h"
+#include "../../includes/LCD.h"
 #include "ChangeTime.h"
 
 unsigned int lastStateButton_time = 0;
 unsigned int delayButton_time = 0;
 unsigned int actualPosition = 0;
 
-enum position {hours,minutes};
+char str1[] = {'M','U','D','A','R',' ','H','O','R','A','S','\0'};
+char buffer [16];
 
+enum position {hours,minutes};
 // Ver outra forma de saber o tamanho do enumerado
 #define LEN_ENUM 2
 
@@ -36,11 +39,11 @@ unsigned int decodeButtons_inHours(unsigned int bitmap)
 		}
 		
 		//Caso nao tenha existido alterações nos botoes
-		if(lastStateButton_time == bitmap && bitmap == BUTTON_MEN && SYSCLK_Elapsed(delayButton_time)>MAX_PRESSED_BUTTON)
+		if(lastStateButton_time == bitmap && bitmap == BUTTON_MEN && SYSCLK_Elapsed(delayButton_time)>MAX_PRESSED_BUTTON_TIME)
 		{
 			lastStateButton_time = 0;
 			delayButton_time = 0;
-			return FULL_RETURN;
+			return SET_HOURS;
 		}
 	
 	}
@@ -51,22 +54,31 @@ unsigned int decodeButtons_inHours(unsigned int bitmap)
 
 void incrementHours(struct tm *dt)
 {
-	dt->tm_hour += 1;
+	dt->tm_hour = (dt->tm_hour+1) % 23;
 }
 
 void decrementHours(struct tm *dt)
 {
+	if(dt->tm_hour==0)
+	{
+		 dt->tm_hour = 23; 
+		return;
+	}
 	dt->tm_hour -= 1;
 }
 
 void incrementMinutes(struct tm *dt)
 {
-	dt->tm_min += 1;
+	dt->tm_min = (dt->tm_min+1)%59;
 }
-
 
 void decrementMinutes(struct tm *dt)
 {
+	if(dt->tm_min==0)
+	{
+		dt->tm_min = 59;
+		return;
+	}
 	dt->tm_min -= 1;
 }
 
@@ -75,11 +87,21 @@ void changeHours(struct tm *dt)
 	unsigned int buttonsState;
 	unsigned int nextState;
 	
-	buttonsState = Button_Read();
-	nextState = decodeButtons_inHours(buttonsState);
+	LCD_Clear();
+	LCD_Goto(0,1);
+	LCD_WriteString(str1);
 	
 	while(nextState != SET_HOURS)
 	{
+	
+		buttonsState = Button_Read();
+		nextState = decodeButtons_inHours(buttonsState);
+		
+		//Actualizar o LCD para os novos valores das horas
+		LCD_Goto(0,0);
+		strftime(buffer,16,"%T",dt);
+		LCD_WriteString(buffer);
+		
 		switch(nextState)
 		{
 			
@@ -102,11 +124,7 @@ void changeHours(struct tm *dt)
 			case CHANGE_FIELD:
 				actualPosition = (actualPosition + 1)%LEN_ENUM;
 				break;
-			
-			case FULL_RETURN:
-				return;
-				break;
-				
+					
 			default:
 				break;
 
