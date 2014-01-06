@@ -2,7 +2,7 @@
 
 void GPIO_Init(unsigned int outbitmask)
 {
-	GPIO->DIR= GPIO->DIR | outbitmask;
+	GPIO->DIR = GPIO->DIR | outbitmask;
 }
 
 void GPIO_SetDirection(unsigned int outbit,unsigned int mask )
@@ -34,4 +34,9 @@ void GPIO_Set(unsigned int maskbit)
 void GPIO_Clr(unsigned int maskbit)
 {
 	GPIO->CLR=maskbit;
+}
+
+void GPIO_Set_Function(unsigned int pinsel, unsigned int maskbit)
+{
+	(pinsel==0) ? GPIO_PINSEL->PINSEL0 |= maskbit : GPIO_PINSEL->PINSEL1 |= maskbit;
 }

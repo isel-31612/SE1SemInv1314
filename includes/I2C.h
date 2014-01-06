@@ -3,6 +3,7 @@
 
 #include "LPC2106REG.h"
 
+<<<<<<< HEAD
 unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned intsize, int freq)
 {
 	
@@ -10,11 +11,17 @@ unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int
 
 
 void I2C_Init();
+=======
+#define SCL 0x1<<2
+#define SDA 0x1<<3
 
-void I2C_Start();
-void I2C_Stop();
+#define DELAY 5
+>>>>>>> efca030d8f481d9278ec3e4356f6daee323b93f2
 
-void I2C_WriteByte(unsigned char byte);
-unsigned char I2C_ReadByte();
+/* I2EN = 1, STA, STO, SI, AA = 0 */
+#define MASTER_MODE 0x50
+
+void I2C_Init();
+unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int size, int freq);
 
 #endif
