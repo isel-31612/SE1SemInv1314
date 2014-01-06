@@ -15,8 +15,6 @@ char buffer [16];
 //time init structure
 struct tm ti;
 
-struct tm toChange;
-
 //Esta função só é chamada quando houve algum botao pressionado
 unsigned int decodeButtons(unsigned int bitmap)
 {
@@ -31,7 +29,6 @@ unsigned int decodeButtons(unsigned int bitmap)
 			lastStateButton = bitmap;
 			return SHOW_HOURS;
 		}
-		
 		//Caso nao tenha existido alterações nos botoes
 		unsigned int t = SYSCLK_Elapsed(delayButton);
 		if(lastStateButton == bitmap && bitmap == BUTTON_MEN && t>=MAX_PRESSED_BUTTON)
@@ -40,11 +37,11 @@ unsigned int decodeButtons(unsigned int bitmap)
 			delayButton = 0;
 			return CHANGE_HOURS;
 		}
+	}else{
+		delayButton = 0;
+		lastStateButton = 0;
 	}
-	delayButton = 0;
-	lastStateButton = 0;
 	return SHOW_HOURS;
-	
 }
 
 
@@ -72,6 +69,7 @@ int main()
 	SYSCLK_Init(1000); /* Acertar o clock do TIMER*/
 	RTC_Init(&ti); /* Iniciar o RTC com a data e hora definida inifialmente*/
 	LCD_Init();
+	LCD_Clear();
 
 	while(1)
 	{
@@ -82,18 +80,14 @@ int main()
 		switch(nextState)
 		{
 			case CHANGE_HOURS:
-				memcpy(&toChange, &ti, sizeof(struct tm));
-				changeHours(&toChange);
-				memcpy(&ti, &toChange, sizeof(struct tm));
+				changeHours(&ti);
 				break;
 				
 			case CHANGE_RADIO:
 				break;
-			
 			//Tambem devia de escrever a freq do radio
 			case SHOW_HOURS:
 				RTC_GetValue(&ti);
-				LCD_Clear();
 				LCD_Goto(0,0);
 				strftime(buffer,16,"%T",&ti);
 				LCD_WriteString(buffer);
@@ -103,8 +97,7 @@ int main()
 				//mostra horas caso algo corra mal
 				break;
 		}
-
-	}	
+	}
 	return 0;
 }
 

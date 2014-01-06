@@ -10,7 +10,7 @@ ENTRY (_start)
 
 MEMORY {
 	flash	: ORIGIN = 0,          LENGTH = 128K		/* FLASH */	
-	ram   	: ORIGIN = 0x40000000, LENGTH = 64K	        /* RAM   */
+	ram   	: ORIGIN = 0x40000000, LENGTH = 64K			/* RAM   */
 }
 
 SECTIONS {

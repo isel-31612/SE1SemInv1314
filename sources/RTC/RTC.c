@@ -30,6 +30,26 @@ void RTC_Init(struct tm *dt)
 	RTC->CCR = 0x1;
 }
 
+void RTC_SetTime(struct tm *dt)
+{
+	RTC->HOUR = dt->tm_hour;
+	RTC->MIN = dt->tm_min;
+	RTC->SEC = dt->tm_sec;
+}
+
+void RTC_SetDate(struct tm *dt)
+{
+	RTC->DOM = dt->tm_mday;
+	RTC->MONTH = dt->tm_mon;
+	RTC->YEAR = dt->tm_year;
+}
+
+void RTC_SetDays(struct tm *dt)
+{
+	RTC->DOW = dt->tm_wday;
+	RTC->DOY = dt->tm_yday;
+}
+
 void RTC_GetValue(struct tm *dateTime)
 {
 		RTC_ReadTime(dateTime);

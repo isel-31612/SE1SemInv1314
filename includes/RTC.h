@@ -12,10 +12,6 @@ void RTC_SetTime(int hour, int min, int sec);
 void RTC_SetDate(int day, int mount, int year);
 void RTC_SetDays(int dayWeek, int dayYear);
 
-unsigned int getTime0();
-unsigned int getTime1();
-unsigned int getTime2();
-*/
 
 void RTC_Init(struct tm *dateTime);
 /* Faz a iniciação do sistema para permitir o acesso ao periférico RTC. O RTC é
@@ -27,6 +23,8 @@ void RTC_ReadDate(struct tm *dt);
 /* Devolve em dt a data corrente do RTC – dia, mês e ano . */
 void RTC_ReadTime(struct tm *tm);
 /* Devolve em tm o tempo corrente do RTC - horas, minutos e segundos. */
-
+void RTC_SetTime(struct tm *dt);
+void RTC_SetDate(struct tm *dt);
+void RTC_SetDays(struct tm *dt);
 
 #endif
