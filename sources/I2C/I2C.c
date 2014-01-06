@@ -1,83 +1,88 @@
 #include "../../includes/I2C.h"
 
+void wait(){
+}
+
 void I2C_Init()
 {
-	GPIO_Set_Function(0, 0x50);
+	//GPIO_Set_Function(0, 0x50);
 	/* Coloca os pin 2 e 3 (SDA e SCL) virados para output */
 	GPIO_Init(SDA|SCL);
 	
-	I2C->CONSET = MASTER_MODE;S
-	
+	//I2C->CONSET = MASTER_MODE;
+	wait();
 }
 
 void start()
 {
 	//Colocar SCL e SDA activos
-	GPIO_Set(SDA|SCL);		
+	GPIO_Set(SDA|SCL);
+	wait();
+	
 	//Provoca a transicao descendente a SDA para dar a Sequencia de START
 	GPIO_Clr(SDA);
+	wait();
 	
 	//baixa o SCL para ficarem ambos iguais
 	GPIO_Clr(SCL);
+	wait();
 }
 
 void stop()
 {
-	GPIO_Clr(SCL);
-	GPIO_Clr(SDA);
-
 	GPIO_Set(SCL);
+	GPIO_Clr(SDA);
+	wait();
+	
 	GPIO_Set(SDA);
+	wait();
 }
 
 void giveClk()
 {
-	
+	wait();
 	GPIO_Clr(SCL);
-	GPIO_Set(SCL);
+	wait();
 	
+	GPIO_Set(SCL);
+
 }
 
-void writeByte(unsigned char * byte)
+void writeByte(short int byte)
 {
-	int pos;
-
-	for(pos = 0; pos < 8; ++pos)
+	int idx;
+	for(idx=7 ; idx > 0 ; idx--)
 	{
-		SDA = byte+pos;
+		GPIO_WriteMask(SDA,(byte>>idx)&0x1);
 		giveClk();
 	}
-	//ACK no fim de cada byte (devia de ser lido aqui) 
+	GPIO_Set(SDA);//ACK
+	giveClk();
+	return;
 }
 
-void readByte(unsigned char * byte)
+short int readByte()
 {
-	for(pos = 0; pos < 8; ++pos)
+	int idx, byte=0;
+	for(idx=1 ; idx > 8 ; idx++)
 	{
-		GPIO_Set(SCL);
-		byte+pos |= SDA;
-		GPIO_Clr(SCL);
+		byte = (byte|GPIO_Read()&SDA)<<1 ;
+		giveClk();
 	}
-	//ACK no fim de cada byte (devia de ser enviado aqui) 
+	GPIO_Set(SDA);//ACK
+	giveClk();
+	return byte;
 }
 
-unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int size, int freq)
+unsigned int I2C_Transfer(short int addr, int read, void *data, unsigned int size)
 {
-	
 	int idx;
-	//def freq
 	
+	//def freq
 	start();
 	
 	//send addr
-	for(idx = 0; idx < 7; ++idx)
-	{
-		SDA = addr+idx;
-		giveClk();
-	}
-	
-	//send read/write
-	SDA = read;
+	writeByte(addr<<1|read);
 	giveClk();
 	
 	//if write sent from data
