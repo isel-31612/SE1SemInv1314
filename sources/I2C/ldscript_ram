@@ -20,6 +20,7 @@ SECTIONS {
 
 	.text ALIGN(4) : {
 		*(.text*)
+		*(.rodata*)
 	} > ram
 	end = .;
 
@@ -42,6 +43,8 @@ SECTIONS {
 	.stack ALIGN(4) : {
 		*(.stack*)
 	} > ram
+
+	.ARM.exidx   : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } > ram
 
   	/* Stabs debugging sections.  */
   	.stab          0 : { *(.stab) }

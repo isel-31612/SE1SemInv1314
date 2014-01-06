@@ -1,6 +1,8 @@
 #include "../../includes/I2C.h"
+#include "../../includes/SClk.h"
 
 void wait(){
+	delay(1);
 }
 
 void I2C_Init()
@@ -8,6 +10,7 @@ void I2C_Init()
 	//GPIO_Set_Function(0, 0x50);
 	/* Coloca os pin 2 e 3 (SDA e SCL) virados para output */
 	GPIO_Init(SDA|SCL);
+	
 	
 	//I2C->CONSET = MASTER_MODE;
 	wait();
@@ -74,7 +77,7 @@ short int readByte()
 	return byte;
 }
 
-unsigned int I2C_Transfer(short int addr, int read, void *data, unsigned int size)
+unsigned int I2C_Transfer(short int addr, int read, void *data, unsigned int size, int freq)
 {
 	int idx;
 	

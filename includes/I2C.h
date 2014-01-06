@@ -12,6 +12,6 @@
 #define MASTER_MODE 0x50
 
 void I2C_Init();
-unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned int size, int freq);
+unsigned int I2C_Transfer(short int addr, int read, void *data, unsigned int size, int freq);
 
 #endif

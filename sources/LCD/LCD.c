@@ -46,7 +46,7 @@ void LCD_Init(void)
 	
 	Write_Nible(0x0);
 	
-	Write_Nible(0x0F); /* DISPLAY ON */
+	Write_Nible(0x0D); /* DISPLAY ON */
 }
 
 void LCD_WriteChar(char ch)
