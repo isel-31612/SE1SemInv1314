@@ -3,6 +3,12 @@
 
 #include "LPC2106REG.h"
 
+unsigned int I2C_Transfer(unsigned char addr, int read, void *data, unsigned intsize, int freq)
+{
+	
+}
+
+
 void I2C_Init();
 
 void I2C_Start();
