@@ -1,8 +1,7 @@
 #ifndef _APP_H_
 #define _APP_H_
 
-	#define MAX_PRESSED_BUTTON 5000
-
+	#define MAX_PRESSED_BUTTON 400
 	//Define os estados da maquina de estados
 	#define CHANGE_HOURS	0
 	#define SHOW_HOURS		1

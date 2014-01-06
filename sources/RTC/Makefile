@@ -1,5 +1,5 @@
 RTC.axf: init.o main.o ../../libs/libUtils.a RTC.o
-	arm-none-eabi-ld -o RTC.axf RTC.o init.o main.o -T ldscript_ram -l Utils -l PLL -L ../../libs/
+	arm-none-eabi-ld -o RTC.axf RTC.o init.o main.o -T ldscript_ram -l LPC2106 -l Utils -L ../../libs/
 
 %.o: %.c
 	arm-none-eabi-gcc -g -c ${<} -o ${@}
