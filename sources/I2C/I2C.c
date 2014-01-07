@@ -11,7 +11,6 @@ void I2C_Init()
 	/* Coloca os pin 2 e 3 (SDA e SCL) virados para output */
 	GPIO_Init(SDA|SCL);
 	
-	
 	//I2C->CONSET = MASTER_MODE;
 	wait();
 }
@@ -46,22 +45,22 @@ void giveClk()
 	wait();
 	GPIO_Clr(SCL);
 	wait();
-	
 	GPIO_Set(SCL);
-
 }
 
 void writeByte(short int byte)
 {
 	int idx;
-	for(idx=7 ; idx > 0 ; idx--)
+	do
 	{
-		GPIO_WriteMask(SDA,(byte>>idx)&0x1);
-		giveClk();
-	}
-	GPIO_Set(SDA);//ACK
+		for(idx=7 ; idx > 0 ; idx--)
+		{
+			GPIO_WriteMask(SDA,(byte>>idx)&0x1);
+			giveClk();
+		}
+		
+	}while(GPIO_Read()&SDA != 1); //Faz read ao ACK que vem do dispositivo para garantir que recebeu bem os dados
 	giveClk();
-	return;
 }
 
 short int readByte()
