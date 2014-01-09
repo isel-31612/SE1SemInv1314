@@ -16,13 +16,8 @@ typedef struct _TEA5767
 }TEA5767;
 
 //MASKS ZONE
+
 void WriteData(TEA5767 *t);
 void ReadData(TEA5767 *t);
-
-void RADIO_SetPll();
-void RADIO_SetMute();
-void RADIO_SetSearch();
-void RADIO_SetBand();
-
 
 #endif 

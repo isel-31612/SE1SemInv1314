@@ -43,23 +43,31 @@ void stop()
 void giveClk()
 {
 	wait();
-	GPIO_Clr(SCL);
-	wait();
 	GPIO_Set(SCL);
+	wait();
+	GPIO_Clr(SCL);
 }
 
-void writeByte(char byte)
+unsigned int writeByte(char byte)
 {
 	int idx;
-	do
+	for(idx=7 ; idx >=  0 ; idx--)
 	{
-		for(idx=7 ; idx > 0 ; idx--)
+		int c = (byte>>idx)&0x1;
+		if(c==1)
 		{
-			GPIO_WriteMask(SDA,(byte>>idx)&0x1);
-			giveClk();
+			GPIO_Set(SDA);
+		}else
+		{
+			GPIO_Clr(SDA);
 		}
-		
-	}while(GPIO_Read()&SDA != 1); //Faz read ao ACK que vem do dispositivo para garantir que recebeu bem os dados
+		//GPIO_WriteMask(SDA,(byte>>idx)&0x1);
+		giveClk();
+	}
+	
+	giveClk();
+	if(GPIO_Read()&SDA != 0) return 1;  //Faz read ao ACK que vem do dispositivo para garantir que recebeu bem os dados
+	else return -1;
 	giveClk();
 }
 
@@ -84,7 +92,7 @@ unsigned int I2C_Transfer(char addr, int read, void *data, unsigned int size, in
 	start();
 	
 	//send addr
-	writeByte(addr<<1|read);
+	if(writeByte(addr<<1|read) == -1) return;
 	giveClk();
 	
 	//if write sent from data
@@ -95,7 +103,6 @@ unsigned int I2C_Transfer(char addr, int read, void *data, unsigned int size, in
 			char* cx = data+idx;
 			writeByte(*cx);
 		}
-	
 	}else if (read == 1) 	//else receive data to *data
 	{
 		for( idx = 0; idx < size; ++idx)
@@ -104,6 +111,5 @@ unsigned int I2C_Transfer(char addr, int read, void *data, unsigned int size, in
 			readByte(cx);
 		}
 	}
-	
 	stop();
 }
