@@ -6,11 +6,9 @@
 unsigned int lastStateButton_time = 0;
 
 unsigned int delayButton_time = 0;
-unsigned int delayClick = 0;
+unsigned int delayClick_time = 0;
 
 unsigned int actualPosition = 0;
-
-unsigned int firstClick = 1;
 
 char str1[] = {'M','U','D','A','R',' ','H','O','R','A','S','\0'};
 char buffer [16];
@@ -24,10 +22,10 @@ unsigned int decodeButtons_inHours(unsigned int bitmap)
 	if(bitmap != 0) //botao pressionado
 	{
 		
-		if(delayClick == 0) delayClick = SYSCLK_GetValue(); 
-		if(SYSCLK_Elapsed(delayClick) < DELAY_CLICK) return DO_NOTHING;
+		if(delayClick_time == 0) delayClick_time = SYSCLK_GetValue(); 
+		if(SYSCLK_Elapsed(delayClick_time) < DELAY_CLICK) return DO_NOTHING;
 		
-		delayClick = 0;
+		delayClick_time = 0;
 		
 		//Short press
 		if(bitmap & BUTTON_DOWN)
@@ -64,7 +62,6 @@ unsigned int decodeButtons_inHours(unsigned int bitmap)
 	{
 		delayButton_time = 0;
 		lastStateButton_time = 0;
-		firstClick = 0;
 	}
 	return DO_NOTHING;
 }
@@ -131,12 +128,10 @@ void changeHours(struct tm *dt)
 				break;
 			
 			case INC_MINUTES:
-				LCD_Goto(0,4);
 				incrementMinutes(dt);
 				break;
 			
 			case DEC_MINUTES:
-				LCD_Goto(0,4);
 				decrementMinutes(dt);
 				break;
 			

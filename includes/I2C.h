@@ -7,6 +7,7 @@
 #define SDA 0x1<<3
 
 #define DELAY 5
+#define MAX_SEND 5
 
 /* I2EN = 1, STA, STO, SI, AA = 0 */
 #define MASTER_MODE 0x50

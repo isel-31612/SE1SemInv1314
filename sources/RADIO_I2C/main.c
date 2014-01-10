@@ -10,6 +10,8 @@ int main(){
 	RADIO_Init();
 	
 	WriteData();
+	RADIO_SetFreq(96.6);
+	WriteData();
 	
 	ReadData(&ra);
 	

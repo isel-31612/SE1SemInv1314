@@ -11,8 +11,8 @@ RADIO.axf: init.o $(MY_LIBS)libUtils.a I2C.o
 %.o: %.S
 	arm-none-eabi-as -g ${<} -o ${@}
 
-lib: I2C.o
-	arm-none-eabi-ar rcs ../../libs/libLPC2106.a I2C.o
+lib: RADIO.o
+	arm-none-eabi-ar rcs ../../libs/libLPC2106.a RADIO.o
 
 test: init.o main.o RADIO.o
 	arm-none-eabi-ld -o Test.axf init.o main.o RADIO.o -T ldscript_ram -l LPC2106 -l Utils -L $(MY_LIBS) -l c -L $(C_LIB) -l gcc -L $(GCC_LIB)

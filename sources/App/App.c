@@ -5,6 +5,7 @@
 
 #include "App.h"
 #include "ChangeTime.h"
+#include "ChangeRadio.h"
 
 unsigned int lastStateButton = 0;
 unsigned int delayButton = 0;
@@ -14,6 +15,9 @@ char buffer [16];
 
 //time init structure
 struct tm ti;
+
+//Radio struct
+TEA5767 tea;
 
 //Esta função só é chamada quando houve algum botao pressionado
 unsigned int decodeButtons(unsigned int bitmap)
@@ -30,8 +34,8 @@ unsigned int decodeButtons(unsigned int bitmap)
 			return SHOW_HOURS;
 		}
 		//Caso nao tenha existido alterações nos botoes
-		unsigned int t = SYSCLK_Elapsed(delayButton);
-		if(lastStateButton == bitmap && bitmap == BUTTON_MEN && t>=MAX_PRESSED_BUTTON)
+
+		if(lastStateButton == bitmap && bitmap == BUTTON_MEN && SYSCLK_Elapsed(delayButton)>=MAX_PRESSED_BUTTON)
 		{
 			lastStateButton = 0;
 			delayButton = 0;
@@ -84,7 +88,9 @@ int main()
 				break;
 				
 			case CHANGE_RADIO:
+				changeRadio(&tea);
 				break;
+				
 			//Tambem devia de escrever a freq do radio
 			case SHOW_HOURS:
 				RTC_GetValue(&ti);
@@ -94,7 +100,6 @@ int main()
 				break;
 				
 			default:
-				//mostra horas caso algo corra mal
 				break;
 		}
 	}

@@ -1,7 +1,7 @@
 #ifndef _CHANGETIME_H_
 #define _CHANGETIME_H_
 
-	#define MAX_PRESSED_BUTTON_TIME 400
+	#define MAX_PRESSED_BUTTON_TIME 750
 	#define DELAY_CLICK 250
 
 	#define SET_HOURS 0
