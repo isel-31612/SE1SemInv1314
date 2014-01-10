@@ -1,3 +1,4 @@
+#include "../../includes/SClk.h"
 #include "../../includes/Buttons.h"
 #include "../../includes/GPIO.h"
 
@@ -26,7 +27,7 @@ unsigned int Button_Read_Block()
 	
 	if(Button_Hit()!=0)
 	{
-		return (GPIO_Read() & (BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
+		return(GPIO_Read() & (BUTTON_DOWN| BUTTON_MEN | BUTTON_UP));
 	}
 	
 	while(Button_Hit()==0);

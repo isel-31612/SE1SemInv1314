@@ -25,22 +25,48 @@ unsigned int decodeButtons(unsigned int bitmap)
 	
 	if(bitmap != 0) //botao pressionado
 	{
+		//Ler novamente para ter a certeza do valor
+		//Pois é muito rapido para se consguir ver o pressionar de 2 botoes
+		delay(10);
+		unsigned int actualState1 = Button_Read();
+		delay(10);
+		unsigned int actualState2 = Button_Read();
+		
+		bitmap |= actualState1 | actualState2;
+		
+		//Long Pressed
+		if((bitmap & BUTTON_DOWN) && (bitmap & BUTTON_UP))
+		{
+			if(lastStateButton == 0){
+				delayButton = SYSCLK_GetValue();
+				lastStateButton = bitmap;
+				return SHOW_HOURS;
+			}
+			
+			if(SYSCLK_Elapsed(delayButton)>=MAX_PRESSED_BUTTON){
+				lastStateButton = 0;
+				delayButton = 0;
+				return CHANGE_HOURS;
+			}
+			return SHOW_HOURS;
+		}else
+		{
+			lastStateButton = 0;
+			delayButton = 0;
+		}
+		
 		//Short press in radio
 		if(bitmap & (BUTTON_DOWN | BUTTON_UP)) return CHANGE_RADIO;
 		
-		if(lastStateButton == 0){
-			delayButton = SYSCLK_GetValue();
-			lastStateButton = bitmap;
-			return SHOW_HOURS;
-		}
 		//Caso nao tenha existido alterações nos botoes
-
-		if(lastStateButton == bitmap && bitmap == BUTTON_MEN && SYSCLK_Elapsed(delayButton)>=MAX_PRESSED_BUTTON)
+		/*
+		if(lastStateButton == bitmap && bitmap & BUTTON_MEN && SYSCLK_Elapsed(delayButton)>=MAX_PRESSED_BUTTON)
 		{
 			lastStateButton = 0;
 			delayButton = 0;
 			return CHANGE_HOURS;
-		}
+		}*/
+		
 	}else{
 		delayButton = 0;
 		lastStateButton = 0;
