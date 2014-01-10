@@ -8,12 +8,13 @@ int main(){
 	I2C_Init();
 	SYSCLK_Init(1000);
 	RADIO_Init();
-	
-	WriteData();
-	RADIO_SetFreq(96.6);
+	RADIO_Search(SEARCH_UP, 2);
 	WriteData();
 	
-	ReadData(&ra);
+	while(1){
+		ReadData(&ra);
+		if(1);
+	}
 	
 	return 0;
 }

@@ -5,12 +5,13 @@ TEA5767 RADIO_BUFFER;
 
 void RADIO_Init()
 {
-
+	
 	RADIO_BUFFER.byte1 = 0x00;
 	RADIO_BUFFER.byte2 = 0x00;
 	RADIO_BUFFER.byte3 = 0x10;
 	RADIO_BUFFER.byte4 = 0x10;
 	RADIO_BUFFER.byte5 = 0x00;
+
 	/*
 	RADIO_BUFFER.byte1 = 0x2F;
 	RADIO_BUFFER.byte2 = 0xB2;

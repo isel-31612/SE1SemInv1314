@@ -74,9 +74,9 @@ unsigned int writeByte(char byte)
 readByte(char byte)
 {
 	int idx;
-	for(idx=1 ; idx > 8 ; idx++)
+	for(idx=7 ; idx >= 0 ; --idx)
 	{
-		byte |= (byte|GPIO_Read()&SDA)<<1 ;
+		byte |= ((GPIO_Read()&SDA)<<idx);
 		giveClk();
 	}
 	GPIO_Set(SDA);//ACK
@@ -92,7 +92,6 @@ unsigned int I2C_Transfer(char addr, int read, void *data, unsigned int size, in
 	
 	//send addr
 	if(writeByte(addr<<1|read) == -1) return;
-	giveClk();
 	
 	//if write sent from data
 	if(read == 0) //é para escrever em data
