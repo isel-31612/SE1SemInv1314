@@ -6,6 +6,8 @@
 #define SCL 0x1<<2
 #define SDA 0x1<<3
 
+#define SDA_OFFSET 3
+
 #define DELAY 5
 #define MAX_SEND 5
 

@@ -5,27 +5,27 @@ TEA5767 RADIO_BUFFER;
 
 void RADIO_Init()
 {
-	
+	/*
 	RADIO_BUFFER.byte1 = 0x00;
 	RADIO_BUFFER.byte2 = 0x00;
 	RADIO_BUFFER.byte3 = 0x10;
 	RADIO_BUFFER.byte4 = 0x10;
 	RADIO_BUFFER.byte5 = 0x00;
-
-	/*
+	
+	
 	RADIO_BUFFER.byte1 = 0x2F;
 	RADIO_BUFFER.byte2 = 0xB2;
 	RADIO_BUFFER.byte3 = 0x10;
 	RADIO_BUFFER.byte4 = 0x10;
 	RADIO_BUFFER.byte5 = 0x00;
 	*/
-	/*
+	
 	RADIO_BUFFER.byte1 = 0x6E;
 	RADIO_BUFFER.byte2 = 0x1B;
-	RADIO_BUFFER.byte3 = 0x70;
+	RADIO_BUFFER.byte3 = 0x10;
 	RADIO_BUFFER.byte4 = 0x10;
 	RADIO_BUFFER.byte5 = 0x0;
-	*/
+	
 }
 
 void WriteData()
@@ -60,11 +60,9 @@ void RADIO_Band(int bandType)
 void RADIO_SetFreq(float freq)
 {
 	int i;
-	int PLL_freq = (4*(freq*1000+225))/(32768/1000);
-	
-	for(i = 5; i >= 0; --i)
-		RADIO_BUFFER.byte1 = SET_CONFIG((PLL_freq&(0x1<<i)),i,RADIO_BUFFER.byte1);
-	
+	int PLL_freq = (4*(freq*1000+225))/(32.768);
+	RADIO_BUFFER.byte1 &= ~0x3FFF;
+	RADIO_BUFFER.byte1 |= (PLL_freq & 0x3F00)>>8;
 	RADIO_BUFFER.byte2 = PLL_freq & 0xFF;
 }
 
