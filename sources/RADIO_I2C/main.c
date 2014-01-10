@@ -10,10 +10,8 @@ int main(){
 	RADIO_Init();
 	
 	WriteData();
-	
-	
 	RADIO_SetFreq(94.2);
-	
+	//RADIO_Search(SEARCH_UP, 2);
 	WriteData();
 	
 	while(1){
