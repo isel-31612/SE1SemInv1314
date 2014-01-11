@@ -47,6 +47,6 @@ void RADIO_Mute(int mute);
 void RADIO_Search(int searchDirection, int searchStopLevel);
 void RADIO_Band(int bandType);
 void RADIO_SetFreq(float freq);
-double RADIO_GetFreq();
+double RADIO_GetFreq(TEA5767 *buf);
 
 #endif 

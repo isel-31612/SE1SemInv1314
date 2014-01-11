@@ -11,7 +11,6 @@ void RADIO_Init()
 	RADIO_BUFFER.byte3 = 0x10;
 	RADIO_BUFFER.byte4 = 0x10;
 	RADIO_BUFFER.byte5 = 0x00;
-	
 
 }
 
@@ -47,13 +46,17 @@ void RADIO_Band(int bandType)
 void RADIO_SetFreq(float freq)
 {
 	int i;
-	int PLL_freq = (4*(freq*1000+225))/(32.768);
+	unsigned int PLL_freq = (4*(freq*1000+225))/(32.768);
 	RADIO_BUFFER.byte1 &= ~0x3FFF;
 	RADIO_BUFFER.byte1 |= (PLL_freq & 0x3F00)>>8;
 	RADIO_BUFFER.byte2 = PLL_freq & 0xFF;
 }
 
-double RADIO_GetFreq()
+//Pouco correcta
+double RADIO_GetFreq(TEA5767 *buf)
 {
-	return 0.0;
+	unsigned short int freq = 0;
+	freq |= ((buf->byte1 & 0x3F)<<8);
+	freq |= buf->byte2;
+	return (((((float)freq*32768)/4)+225000)/1000000);
 }

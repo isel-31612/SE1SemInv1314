@@ -44,14 +44,14 @@ void giveClk()
 	GPIO_Clr(SCL);
 }
 
-unsigned int writeByte(char byte)
+unsigned int writeByte(char *byte)
 {
 	int idx, count;
 	count = 0;
 	do{
 		for(idx=7 ; idx >=  0 ; idx--)
 		{
-			int c = (byte>>idx)&0x1;
+			int c = ((*byte)>>idx)&0x1;
 			if(c==1)
 				GPIO_Set(SDA);
 			else
@@ -73,6 +73,7 @@ readByte(char *byte, int lastbyte)
 	*byte = 0x0;
 	for(idx=7 ; idx >= 0 ; --idx)
 	{
+		GPIO_Set(SDA);
 		wait();
 		GPIO_Set(SCL);
 		wait();
@@ -99,17 +100,18 @@ unsigned int I2C_Transfer(char addr, int read, void *data, unsigned int size, in
 	start();
 	
 	//send addr
-	if(writeByte(addr<<1|read) == -1) return;
+	addr = addr<<1|read; 
+	if(writeByte(&addr) == -1) return;
 	
 	//if write sent from data
 	if(read == 0) //é para escrever em data
 	{
+		char* cx = (char*)data;
 		for( idx = 0; idx < size; ++idx)
-		{
-			char* cx = data+idx;
-			if(writeByte(*cx)==-1) return -1;
-		}
-	}else if (read == 1) 	//else receive data to *data
+			if(writeByte(cx+idx)==-1) return -1;
+	}
+	
+	if (read == 1) 	//else receive data to *data
 	{
 		char* cx = (char*)data;
 		for( idx = 0; idx < size; ++idx)

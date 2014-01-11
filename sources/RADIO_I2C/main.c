@@ -10,14 +10,11 @@ int main(){
 	RADIO_Init();
 	
 	WriteData();
-	RADIO_SetFreq(94.2);
-	//RADIO_Search(SEARCH_UP, 2);
+	RADIO_SetFreq(99.8);
 	WriteData();
 	
-	while(1){
-		ReadData(&ra);
-		if(1);
-	}
+	ReadData(&ra);
+	float raf = RADIO_GetFreq(&ra);
 	
 	return 0;
 }
