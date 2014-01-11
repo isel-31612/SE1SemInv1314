@@ -1,7 +1,7 @@
 #include "../../includes/Flash.h"
 
-unsigned int IAP_command[5];
-unsigned int IAP_result[2];
+unsigned int IAP_command[5] = {0,0,0,0,0};
+unsigned int IAP_result[2] = {0,0};
 
 IAP IAP_entry = (IAP) IAP_ADDR;
 

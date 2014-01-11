@@ -14,7 +14,21 @@
 /* I2EN = 1, STA, STO, SI, AA = 0 */
 #define MASTER_MODE 0x50
 
+/**
+ * @fn void I2C_Init()
+ * Inicia o periférico de I2C
+ * */
 void I2C_Init();
+
+/**
+ * @fn unsigned int I2C_Transfer(char addr, int read, void *data, unsigned int size, int freq)
+ * @param Address do periférico
+ * @param READ (0) ou WRITE (1)
+ * @param Buffer de dados a enviar ou a receber do I2C
+ * @param Tamanho do buffer
+ * @param Frequencia de transmissão do I2C 
+ * Função que permite transferir dados para ou do I2C
+ * */
 unsigned int I2C_Transfer(char addr, int read, void *data, unsigned int size, int freq);
 
 #endif

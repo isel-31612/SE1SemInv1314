@@ -5,7 +5,7 @@
 int main()
 {
 
-	unsigned int res = FLASH_EraseSectors(SECTOR_0, SECTOR_0);
+	unsigned int res = FLASH_EraseSectors(SECTOR_14, SECTOR_14);
 	return 0;
 }
 
