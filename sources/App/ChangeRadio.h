@@ -13,6 +13,10 @@
 #define DO_NOTHING_RADIO	4
 #define SAVE_STATION	5
 #define OUT_RADIO		6
+#define MUTE			7
+
+#define MUTE_ON 0xFF
+#define MUTE_OFF 0x0
 
 unsigned int decodeButtons_inRadio(unsigned int bitmap);
 

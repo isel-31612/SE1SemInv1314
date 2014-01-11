@@ -5,13 +5,11 @@ TEA5767 RADIO_BUFFER;
 
 void RADIO_Init()
 {
-	
 	RADIO_BUFFER.byte1 = 0x00;
 	RADIO_BUFFER.byte2 = 0x00;
 	RADIO_BUFFER.byte3 = 0x10;
 	RADIO_BUFFER.byte4 = 0x10;
 	RADIO_BUFFER.byte5 = 0x00;
-
 }
 
 void WriteData()
@@ -55,8 +53,12 @@ void RADIO_SetFreq(float freq)
 //Pouco correcta
 double RADIO_GetFreq(TEA5767 *buf)
 {
-	unsigned short int freq = 0;
-	freq |= ((buf->byte1 & 0x3F)<<8);
-	freq |= buf->byte2;
-	return (((((float)freq*32768)/4)+225000)/1000000);
+	unsigned short int pll = 0;
+	pll |= ((buf->byte1 & 0x3F)<<8);
+	pll |= buf->byte2;
+	/*
+	 * Formula calculada por:
+	 * http://www.wolframalpha.com/input/?i=x%3D(4*(y*1000%2B225))%2F(32.768)
+	 */
+	return -0.008192*(27.4658-pll);
 }

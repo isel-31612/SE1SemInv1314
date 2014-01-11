@@ -2,7 +2,7 @@
 #include "../../includes/Buttons.h"
 #include "../../includes/RTC.h"
 #include "../../includes/LCD.h"
-
+#include <stdio.h>
 #include "App.h"
 #include "ChangeTime.h"
 #include "ChangeRadio.h"
@@ -40,7 +40,7 @@ unsigned int decodeButtons(unsigned int bitmap)
 			if(lastStateButton == 0){
 				delayButton = SYSCLK_GetValue();
 				lastStateButton = bitmap;
-				return SHOW_HOURS;
+				return SHOW;
 			}
 			
 			if(SYSCLK_Elapsed(delayButton)>=MAX_PRESSED_BUTTON){
@@ -48,7 +48,7 @@ unsigned int decodeButtons(unsigned int bitmap)
 				delayButton = 0;
 				return CHANGE_HOURS;
 			}
-			return SHOW_HOURS;
+			return SHOW;
 		}else
 		{
 			lastStateButton = 0;
@@ -56,22 +56,12 @@ unsigned int decodeButtons(unsigned int bitmap)
 		}
 		
 		//Short press in radio
-		if(bitmap & (BUTTON_DOWN | BUTTON_UP)) return CHANGE_RADIO;
-		
-		//Caso nao tenha existido alterações nos botoes
-		/*
-		if(lastStateButton == bitmap && bitmap & BUTTON_MEN && SYSCLK_Elapsed(delayButton)>=MAX_PRESSED_BUTTON)
-		{
-			lastStateButton = 0;
-			delayButton = 0;
-			return CHANGE_HOURS;
-		}*/
-		
+		if(bitmap & (BUTTON_DOWN | BUTTON_UP | BUTTON_MEN)) return CHANGE_RADIO;
 	}else{
 		delayButton = 0;
 		lastStateButton = 0;
 	}
-	return SHOW_HOURS;
+	return SHOW;
 }
 
 
@@ -100,7 +90,12 @@ int main()
 	RTC_Init(&ti); /* Iniciar o RTC com a data e hora definida inifialmente*/
 	LCD_Init();
 	LCD_Clear();
-
+	I2C_Init();
+	
+	RADIO_Init();
+	RADIO_SetFreq(89.9);
+	WriteData();
+	
 	while(1)
 	{
 
@@ -115,13 +110,22 @@ int main()
 				
 			case CHANGE_RADIO:
 				changeRadio(&tea);
+				LCD_Clear();
 				break;
 				
 			//Tambem devia de escrever a freq do radio
-			case SHOW_HOURS:
+			case SHOW:
 				RTC_GetValue(&ti);
-				LCD_Goto(0,0);
+				LCD_Goto(4,0);
 				strftime(buffer,16,"%T",&ti);
+				LCD_WriteString(buffer);
+
+				ReadData(&tea);
+				float fm = RADIO_GetFreq(&tea);
+				int level = RADIO_Station_Level(&tea);
+				int parteDecimal = (int)(fm*10)%10;
+				sprintf(buffer, "%d.%dMHz L:%d",(int)fm,parteDecimal, level);
+				LCD_Goto(0,1);
 				LCD_WriteString(buffer);
 				break;
 				

@@ -14,11 +14,12 @@
 #define JAPONESE_BAND 1
 #define EU_BAND 0
 
-#define OFF 0
-#define ON 1
+#define SEARCH_DOWN	0
+#define SEARCH_UP	1
 
-#define SEARCH_DOWN 0
-#define SEARCH_UP 1
+#define IN_SEARCH	0
+#define STATION_OK	2
+#define STATION_NOK	3
 
 //OFFSET's
 #define BAND_LIMIT_OFFSET	5
@@ -47,6 +48,9 @@ void RADIO_Mute(int mute);
 void RADIO_Search(int searchDirection, int searchStopLevel);
 void RADIO_Band(int bandType);
 void RADIO_SetFreq(float freq);
+
 double RADIO_GetFreq(TEA5767 *buf);
+int searchInfo(TEA5767 *rad);
+int RADIO_Station_Level (TEA5767 *rad);
 
 #endif 

@@ -29,3 +29,7 @@ cd ..
 cd Buttons
 make lib
 cd ..
+
+cd RADIO
+make lib
+cd ..

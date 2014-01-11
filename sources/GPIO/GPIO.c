@@ -31,6 +31,7 @@ void GPIO_Set(unsigned int maskbit)
 {
 	GPIO->SET=maskbit;
 }
+
 void GPIO_Clr(unsigned int maskbit)
 {
 	GPIO->CLR=maskbit;
@@ -38,5 +39,8 @@ void GPIO_Clr(unsigned int maskbit)
 
 void GPIO_Set_Function(unsigned int pinsel, unsigned int maskbit)
 {
-	(pinsel==0) ? GPIO_PINSEL->PINSEL0 |= maskbit : GPIO_PINSEL->PINSEL1 |= maskbit;
+	if(pinsel==0)
+		GPIO_PINSEL->PINSEL0 = GPIO_PINSEL->PINSEL0 | maskbit;
+	else
+		GPIO_PINSEL->PINSEL1 = GPIO_PINSEL->PINSEL1 | maskbit;
 }

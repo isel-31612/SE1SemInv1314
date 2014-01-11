@@ -10,8 +10,6 @@ void I2C_Init()
 	//GPIO_Set_Function(0, 0x50);
 	/* Coloca os pin 2 e 3 (SDA e SCL) virados para output */
 	GPIO_Init(SDA|SCL);
-	
-	//I2C->CONSET = MASTER_MODE;
 	wait();
 }
 
@@ -27,13 +25,11 @@ void start()
 	
 	//baixa o SCL para ficarem ambos iguais
 	GPIO_Clr(SCL);
-	wait();
 }
 
 void stop()
 {
-	GPIO_Set(SCL);
-	GPIO_Clr(SDA);
+	GPIO_Clr(SDA|SCL);
 	wait();
 	
 	GPIO_Set(SDA);
@@ -48,14 +44,14 @@ void giveClk()
 	GPIO_Clr(SCL);
 }
 
-unsigned int writeByte(char byte)
+unsigned int writeByte(char *byte)
 {
 	int idx, count;
 	count = 0;
 	do{
 		for(idx=7 ; idx >=  0 ; idx--)
 		{
-			int c = (byte>>idx)&0x1;
+			int c = ((*byte)>>idx)&0x1;
 			if(c==1)
 				GPIO_Set(SDA);
 			else
@@ -65,21 +61,34 @@ unsigned int writeByte(char byte)
 		}
 		giveClk();
 		++count;
-	}while((count <= MAX_SEND) &&(GPIO_Read()&SDA == 0));
+	}while((count <= MAX_SEND) &&(GPIO_Read()&SDA == 0)); //Verifica se ainda é NACK, enquanto for tenta enviar os dados
 	//if(GPIO_Read()&SDA != 0) return 1;  //Faz read ao ACK que vem do dispositivo para garantir que recebeu bem os dados
 	if(count > MAX_SEND) return -1;
 	return 1;
 }
 
-readByte(char byte)
+readByte(char *byte, int lastbyte)
 {
 	int idx;
-	for(idx=1 ; idx > 8 ; idx++)
+	*byte = 0x0;
+	for(idx=7 ; idx >= 0 ; --idx)
 	{
-		byte |= (byte|GPIO_Read()&SDA)<<1 ;
-		giveClk();
+		GPIO_Set(SDA);
+		wait();
+		GPIO_Set(SCL);
+		wait();
+		
+		char cs = (GPIO_Read()&SDA)>>SDA_OFFSET;
+		char myByte = ((GPIO_Read()&SDA)>>SDA_OFFSET)<<idx;
+		*byte |= ((GPIO_Read()&SDA)>>SDA_OFFSET)<<idx;
+		
+		GPIO_Clr(SCL);
 	}
-	GPIO_Set(SDA);//ACK
+	if(lastbyte == 1)
+		GPIO_Set(SDA);//NACK
+	else
+		GPIO_Clr(SDA);//ACK
+		
 	giveClk();
 }
 
@@ -91,23 +100,26 @@ unsigned int I2C_Transfer(char addr, int read, void *data, unsigned int size, in
 	start();
 	
 	//send addr
-	if(writeByte(addr<<1|read) == -1) return;
-	giveClk();
+	addr = addr<<1|read; 
+	if(writeByte(&addr) == -1) return;
 	
 	//if write sent from data
 	if(read == 0) //é para escrever em data
 	{
+		char* cx = (char*)data;
 		for( idx = 0; idx < size; ++idx)
-		{
-			char* cx = data+idx;
-			if(writeByte(*cx)==-1) return -1;
-		}
-	}else if (read == 1) 	//else receive data to *data
+			if(writeByte(cx+idx)==-1) return -1;
+	}
+	
+	if (read == 1) 	//else receive data to *data
 	{
+		char* cx = (char*)data;
 		for( idx = 0; idx < size; ++idx)
 		{
-			char* cx = data+idx;
-			readByte(*cx);
+			if(idx+1 == size)
+				readByte(cx+idx, 1);
+			else
+				readByte(cx+idx, 0);
 		}
 	}
 	stop();
