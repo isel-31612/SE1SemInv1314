@@ -38,19 +38,75 @@ typedef struct _TEA5767
 	char byte5;
 }TEA5767;
 
-//MASKS ZONE
+/**
+ * @fn void WriteData()
+ * Escreve no modulo de radio os valores que foram alterados selas funçoes seguintes
+ * */
 void WriteData();
-void ReadData();
 
+/**
+ * @fn void ReadData()
+ * @param *t estrutura onde são devolvidos os dados do modulo
+ * Devolve os dados do modulo de rádio
+ * */
+void ReadData(TEA5767 *t);
+
+/**
+ * @fn void RADIO_Init()
+ * Inicia o modulo de rádio
+ */
 void RADIO_Init();
 
+/**
+ * @fn void RADIO_Mute(int mute);
+ * @param mute 0 ou 1, inactivo ou activo
+ * Define o estado de mute do modulo
+ * */
 void RADIO_Mute(int mute);
+
+/**
+ *@fn void RADIO_Search(int searchDirection, int searchStopLevel)
+ *@param searchDirection Define se a pesquisa é para cima ou para baixo
+ *@param searchStopLevel Define qual a qualidade minima que o sinal tem de ter para ser a escolhida
+ *Procura a proxima frequência que tenha o sinal especificado
+ */
 void RADIO_Search(int searchDirection, int searchStopLevel);
+
+/**
+ * @fn void RADIO_Band(int bandType)
+ * @param bandType 0 = EU, 1 = JAPAN
+ * Define a banda de frequência que o modulo vai utilizar
+ */
 void RADIO_Band(int bandType);
+
+/**
+ * @fn void RADIO_SetFreq(float freq)
+ * @param freq frequência em Mhz da rádio
+ * Sintoniza a frequência passada como parametro
+ */
 void RADIO_SetFreq(float freq);
 
+/**
+ * @fn double RADIO_GetFreq(TEA5767 *buf)
+ * @param *buf Estrutura que tem a frequência pretendida
+ * Devolve a frequência da rádio sintonizada, valor em MHz
+ **/
 double RADIO_GetFreq(TEA5767 *buf);
+
+/**
+ * @fn int searchInfo(TEA5767 *rad)
+ * @param *rad estrutura onde é devolvida a informação
+ * @return Se a estação está sintonizada ou não.
+ * Devolve a informação sobre a procura de uma estação
+ * */
 int searchInfo(TEA5767 *rad);
+
+/**
+ * @fn int RADIO_Station_Level (TEA5767 *rad)
+ * @param *rad estrutura onde é devolvida a informação
+ * @return retorna a qualidade da frequência sintonizada
+ * Devolve a qualidade da frequência sintonizada
+ * */
 int RADIO_Station_Level (TEA5767 *rad);
 
 #endif 
