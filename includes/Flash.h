@@ -69,7 +69,6 @@
 #define FLASH_SECTOR_14_END 0x0001DFFF
 #define FLASH_SECTOR_15_END 0x0001FFFF
 
-
 /**
  * @def IAPCodes são as constantes que podem ser retornadas pela chamada a uma rotina de IAP
  * */
@@ -96,7 +95,7 @@ enum IAPCommands {
 				COPY_RAM_TO_FLASH,
 				ERASE_SECTORS,
 				BLANK_CHECK_SECTORS,
-				READ_PART_IDENTIFICATION NUMBER,
+				READ_PART_IDENTIFICATION_NUMBER,
 				READ_BOOT_CODE_VERSION_NUMBER,
 				COMPARE
 			};
